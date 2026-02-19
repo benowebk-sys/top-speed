@@ -25,6 +25,7 @@ app.use(
       'http://localhost:5175',
       'http://localhost:3000',
       process.env.FRONTEND_URL || 'https://topspeed-frontend.vercel.app',
+      'https://*.vercel.app',
     ],
     credentials: true,
   })

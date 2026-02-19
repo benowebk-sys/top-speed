@@ -7,6 +7,8 @@ build/
 /.vercel/
 .env
 .env.local
+.env.*.local
+!.env.example
 .DS_Store
 .vite/
 .parcel-cache/
@@ -16,8 +18,7 @@ yarn-error.log*
 coverage/
 *.local
 *.log
-public/sw.jsnode_modules/
-/backend/node_modules/
+public/sw.js
 /frontend/node_modules/
 dist/
 build/

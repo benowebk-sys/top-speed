@@ -254,6 +254,43 @@ Status codes:
 
 ## Deployment
 
+### Vercel (Serverless)
+
+**Requirements:**
+- Vercel account connected to GitHub
+- MongoDB Atlas (cloud database)
+- All environment variables configured
+
+**Steps:**
+
+1. **Create MongoDB Atlas cluster** (if not already)
+   - Go to https://www.mongodb.com/cloud/atlas
+   - Create cluster and get connection string
+   - Whitelist Vercel IP: `0.0.0.0/0`
+
+2. **Deploy Backend to Vercel**
+   ```bash
+   vercel --prod
+   ```
+
+3. **Add Environment Variables in Vercel Dashboard**
+   - Go to Project Settings → Environment Variables
+   - Add all variables from `.env.example`:
+     - `MONGODB_URI`: Your MongoDB Atlas connection string
+     - `JWT_SECRET`: Your JWT secret key
+     - `EMAIL_USER` & `EMAIL_PASSWORD`: For email notifications
+     - `FRONTEND_URL`: Your Vercel frontend URL
+     - `NODE_ENV`: Set to `production`
+
+4. **Redeploy after adding env vars**
+   ```bash
+   vercel --prod
+   ```
+
+5. **Get your Vercel Backend URL**
+   - Example: `https://top-speed-backend.vercel.app`
+   - Use this URL in Frontend `VITE_API_URL`
+
 ### Render.com
 
 1. Connect GitHub repository
