@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { carService } from '../services/api';
 import { AnimatedCard, PageTransition } from '../components/Animations';
 import { Header, Footer } from '../components/Layout';
-import { Navigation } from '../components/Navigation';
 import { Zap, Gauge, Fuel, Wrench } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
 // البيانات الافتراضية للسيارات الحديثة 2024-2025
@@ -21,7 +20,7 @@ const DEFAULT_CARS = [
     fuelType: 'Petrol',
     drivetrain: 'AWD',
     category: 'Sedan',
-    price: 80000,
+    price: 3500000,
     imageUrl: '/images/cars/bmw-m440i.jpg',
     description: 'Latest generation M440i with advanced tech',
     isVisible: true,
@@ -38,7 +37,7 @@ const DEFAULT_CARS = [
     fuelType: 'Petrol',
     drivetrain: 'AWD',
     category: 'Sedan',
-    price: 85000,
+    price: 3800000,
     imageUrl: '/images/cars/mercedes-c43.jpg',
     description: 'New generation AMG C43 with hybrid power',
     isVisible: true,
@@ -55,7 +54,7 @@ const DEFAULT_CARS = [
     fuelType: 'Petrol',
     drivetrain: 'AWD',
     category: 'Sedan',
-    price: 125000,
+    price: 5500000,
     imageUrl: '/images/cars/audi-rs7.jpg',
     description: 'Latest RS7 Avant with enhanced power output',
     isVisible: true,
@@ -72,7 +71,7 @@ const DEFAULT_CARS = [
     fuelType: 'Petrol',
     drivetrain: 'AWD',
     category: 'Sports',
-    price: 210000,
+    price: 9500000,
     imageUrl: '/images/cars/porsche-911-turbo.jpg',
     description: '2024 911 Turbo S with next-gen tech',
     isVisible: true,
@@ -89,7 +88,7 @@ const DEFAULT_CARS = [
     fuelType: 'Hybrid',
     drivetrain: 'AWD',
     category: 'Sports',
-    price: 550000,
+    price: 25000000,
     imageUrl: '/images/cars/lamborghini-revuelto.jpg',
     description: 'Lamborghini flagship hybrid supercar',
     isVisible: true,
@@ -106,7 +105,7 @@ const DEFAULT_CARS = [
     fuelType: 'Petrol',
     drivetrain: 'RWD',
     category: 'Sports',
-    price: 450000,
+    price: 20000000,
     imageUrl: '/images/cars/ferrari-812.jpg',
     description: 'Ferrari 812 Superfast with V12 power',
     isVisible: true,
@@ -123,7 +122,7 @@ const DEFAULT_CARS = [
     fuelType: 'Electric',
     drivetrain: 'AWD',
     category: 'Sedan',
-    price: 115000,
+    price: 5000000,
     imageUrl: '/images/cars/tesla-model-s-2024.jpg',
     description: 'Refreshed Model S Plaid with improved performance',
     isVisible: true,
@@ -140,7 +139,7 @@ const DEFAULT_CARS = [
     fuelType: 'Hybrid',
     drivetrain: 'RWD',
     category: 'Sports',
-    price: 350000,
+    price: 16000000,
     imageUrl: '/images/cars/mclaren-artura.jpg',
     description: 'McLaren hybrid supercar with groundbreaking tech',
     isVisible: true,
@@ -157,7 +156,7 @@ const DEFAULT_CARS = [
     fuelType: 'Petrol',
     drivetrain: 'AWD',
     category: 'Coupe',
-    price: 280000,
+    price: 13000000,
     imageUrl: '/images/cars/bentley-speed.jpg',
     description: 'Latest Bentley Continental Speed with ultimate luxury',
     isVisible: true,
@@ -174,7 +173,7 @@ const DEFAULT_CARS = [
     fuelType: 'Petrol',
     drivetrain: 'AWD',
     category: 'Sports',
-    price: 5000000,
+    price: 150000000,
     imageUrl: '/images/cars/bugatti-bolide.jpg',
     description: 'Bugatti Bolide - fastest hypercar ever created',
     isVisible: true,
@@ -191,7 +190,7 @@ const DEFAULT_CARS = [
     fuelType: 'Petrol',
     drivetrain: 'AWD',
     category: 'Sedan',
-    price: 320000,
+    price: 15000000,
     imageUrl: '/images/cars/rolls-royce-ghost-bb.jpg',
     description: 'Rolls-Royce Ghost Black Badge with exclusive styling',
     isVisible: true,
@@ -208,7 +207,7 @@ const DEFAULT_CARS = [
     fuelType: 'Petrol',
     drivetrain: 'RWD',
     category: 'Sports',
-    price: 105000,
+    price: 4500000,
     imageUrl: '/images/cars/jaguar-f-type-2025.jpg',
     description: 'New generation Jaguar F-Type with modern design',
     isVisible: true,
@@ -225,7 +224,7 @@ const DEFAULT_CARS = [
     fuelType: 'Electric',
     drivetrain: 'AWD',
     category: 'Coupe',
-    price: 95000,
+    price: 4200000,
     imageUrl: '/images/cars/dodge-charger-daytona.jpg',
     description: 'New Dodge Charger Daytona EV muscle car',
     isVisible: true,
@@ -242,7 +241,7 @@ const DEFAULT_CARS = [
     fuelType: 'Hybrid',
     drivetrain: 'AWD',
     category: 'Sports',
-    price: 120000,
+    price: 5500000,
     imageUrl: '/images/cars/corvette-e-ray.jpg',
     description: 'Chevrolet Corvette E-Ray hybrid supercar',
     isVisible: true,
@@ -250,6 +249,7 @@ const DEFAULT_CARS = [
 ];
 
 export const CarsPage = () => {
+  const navigate = useNavigate();
   const [cars, setCars] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -260,9 +260,9 @@ export const CarsPage = () => {
   useEffect(() => {
     const fetchCars = async () => {
       try {
-        console.log('🔄 Fetching cars from API...');
+        console.log('Fetching cars from API...');
         const response = await carService.getAllCars();
-        console.log('✅ Cars fetched:', response.data);
+        console.log('Cars fetched:', response.data);
         
         if (Array.isArray(response.data) && response.data.length > 0) {
           setCars(response.data);
@@ -274,7 +274,7 @@ export const CarsPage = () => {
           throw new Error('No cars in response');
         }
       } catch (err) {
-        console.log('⚠️ API failed, using default cars:', err.message);
+        console.log('API failed, using default cars:', err.message);
         setCars(DEFAULT_CARS);
         const uniqueBrands = ['All', ...new Set(DEFAULT_CARS.map((c) => c.brand))];
         setBrands(uniqueBrands);
@@ -297,19 +297,19 @@ export const CarsPage = () => {
 
   return (
     <PageTransition>
-      <Navigation />
-      <Header
-        title="Car Catalog"
-        subtitle="Browse and customize premium vehicles"
-      />
+      <div>
+        <Header
+          title="Car Catalog"
+          subtitle="Browse and customize premium vehicles"
+        />
 
-      <div className="max-w-7xl mx-auto px-4 py-12">
-        <div className="mb-8 flex gap-4 overflow-x-auto pb-4">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-6 sm:py-12">
+        <div className="mb-6 sm:mb-8 flex gap-2 sm:gap-4 overflow-x-auto pb-4">
           {brands.map((brand) => (
             <button
               key={brand}
               onClick={() => setSelectedBrand(brand)}
-              className={`px-6 py-2 rounded-lg font-semibold transition whitespace-nowrap ${
+              className={`px-3 sm:px-4 md:px-6 py-1 sm:py-2 rounded-lg text-xs sm:text-sm md:text-base font-semibold transition whitespace-nowrap ${
                 selectedBrand === brand
                   ? 'bg-red-600 text-white'
                   : 'bg-gray-900 text-gray-300 hover:bg-gray-800'
@@ -321,23 +321,23 @@ export const CarsPage = () => {
         </div>
 
         {loading ? (
-          <div className="text-center py-12">
-            <div className="w-12 h-12 border-4 border-gray-700 border-t-red-600 rounded-full animate-spin mx-auto"></div>
-            <p className="text-gray-400 mt-4">Loading cars...</p>
+          <div className="text-center py-8 sm:py-12">
+            <div className="w-10 sm:w-12 h-10 sm:h-12 border-4 border-gray-700 border-t-red-600 rounded-full animate-spin mx-auto"></div>
+            <p className="text-xs sm:text-sm md:text-base text-gray-400 mt-3 sm:mt-4">Loading cars...</p>
           </div>
         ) : error ? (
-          <div className="text-center py-12">
-            <p className="text-red-600 font-semibold">{error}</p>
+          <div className="text-center py-8 sm:py-12">
+            <p className="text-sm sm:text-base md:text-lg text-red-600 font-semibold">{error}</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
             {filteredCars.map((car, idx) => (
               <AnimatedCard key={car._id} delay={idx * 0.1}>
                 <Link
                   to={`/car-detail?carId=${car._id}`}
                   className="block group cursor-pointer h-full"
                 >
-                  <div className="aspect-video bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg mb-4 flex items-center justify-center overflow-hidden group-hover:opacity-90 transition">
+                  <div className="aspect-video bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg mb-3 sm:mb-4 flex items-center justify-center overflow-hidden group-hover:opacity-90 transition">
                     {car.imageUrl ? (
                       <img
                         src={car.imageUrl}
@@ -346,54 +346,62 @@ export const CarsPage = () => {
                       />
                     ) : (
                       <div className="text-center">
-                        <Wrench className="w-12 h-12 text-gray-600 mx-auto mb-2" />
-                        <p className="text-gray-500 text-sm">No image available</p>
+                        <Wrench className="w-8 sm:w-10 md:w-12 h-8 sm:h-10 md:h-12 text-gray-600 mx-auto mb-1 sm:mb-2" />
+                        <p className="text-xs sm:text-sm text-gray-500">No image available</p>
                       </div>
                     )}
                   </div>
-                  <h3 className="text-xl font-bold text-white mb-2 group-hover:text-red-600 transition">
+                  <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-1 sm:mb-2 group-hover:text-red-600 transition">
                     {car.brand} {car.model}
                   </h3>
-                  <p className="text-gray-400 text-sm mb-4">{car.year}</p>
-                  <div className="grid grid-cols-2 gap-4 mb-6">
-                    <div className="bg-gray-800 rounded-lg p-3">
-                      <Zap className="w-4 h-4 text-red-600 mb-1" />
-                      <p className="text-gray-400 text-xs">Horsepower</p>
-                      <p className="text-white font-bold">{car.horsepower} HP</p>
+                  <p className="text-xs sm:text-sm text-gray-400 mb-1 sm:mb-2">{car.year}</p>
+                  <p className="text-red-600 font-bold text-base sm:text-lg md:text-xl mb-3 sm:mb-4">
+                    {new Intl.NumberFormat('en-US', {
+                      minimumFractionDigits: 0,
+                    }).format(car.price)}
+                  </p>
+                  <div className="grid grid-cols-2 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6">
+                    <div className="bg-gray-800 rounded-lg p-2 sm:p-3">
+                      <Zap className="w-3 sm:w-4 h-3 sm:h-4 text-red-600 mb-1" />
+                      <p className="text-xs text-gray-400">Horsepower</p>
+                      <p className="text-xs sm:text-sm text-white font-bold">{car.horsepower} HP</p>
                     </div>
-                    <div className="bg-gray-800 rounded-lg p-3">
-                      <Gauge className="w-4 h-4 text-blue-600 mb-1" />
-                      <p className="text-gray-400 text-xs">Top Speed</p>
-                      <p className="text-white font-bold">{car.topSpeed} km/h</p>
+                    <div className="bg-gray-800 rounded-lg p-2 sm:p-3">
+                      <Gauge className="w-3 sm:w-4 h-3 sm:h-4 text-blue-600 mb-1" />
+                      <p className="text-xs text-gray-400">Top Speed</p>
+                      <p className="text-xs sm:text-sm text-white font-bold">{car.topSpeed} km/h</p>
                     </div>
-                    <div className="bg-gray-800 rounded-lg p-3">
-                      <Fuel className="w-4 h-4 text-orange-600 mb-1" />
-                      <p className="text-gray-400 text-xs">Fuel Type</p>
-                      <p className="text-white font-bold text-sm">{car.fuelType}</p>
+                    <div className="bg-gray-800 rounded-lg p-2 sm:p-3">
+                      <Fuel className="w-3 sm:w-4 h-3 sm:h-4 text-orange-600 mb-1" />
+                      <p className="text-xs text-gray-400">Fuel Type</p>
+                      <p className="text-xs sm:text-sm text-white font-bold">{car.fuelType}</p>
                     </div>
-                    <div className="bg-gray-800 rounded-lg p-3">
-                      <Wrench className="w-4 h-4 text-gray-400 mb-1" />
-                      <p className="text-gray-400 text-xs">0-100 km/h</p>
-                      <p className="text-white font-bold">{typeof car.acceleration === 'number' ? car.acceleration.toFixed(1) : (parseFloat(car.acceleration) || 0).toFixed(1)}s</p>
+                    <div className="bg-gray-800 rounded-lg p-2 sm:p-3">
+                      <Wrench className="w-3 sm:w-4 h-3 sm:h-4 text-gray-400 mb-1" />
+                      <p className="text-xs text-gray-400">0-100 km/h</p>
+                      <p className="text-xs sm:text-sm text-white font-bold">{typeof car.acceleration === 'number' ? car.acceleration.toFixed(1) : (parseFloat(car.acceleration) || 0).toFixed(1)}s</p>
                     </div>
                   </div>
                 </Link>
-                <Link
-                  to={`/configurator?carId=${car._id}`}
-                  className="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg font-semibold transition text-center block"
-                >
-                  Customize
-                </Link>
+                <div className="flex gap-2 sm:gap-3">
+                  <button
+                    onClick={() => navigate(`/car-detail?carId=${car._id}`)}
+                    className="w-full bg-red-600 hover:bg-red-700 text-white py-1.5 sm:py-2 text-xs sm:text-sm md:text-base rounded-lg font-semibold transition"
+                  >
+                    View Details
+                  </button>
+                </div>
               </AnimatedCard>
             ))}
           </div>
         )}
 
         {filteredCars.length === 0 && !loading && (
-          <div className="text-center py-12">
-            <p className="text-gray-400 text-lg">No cars found in this category</p>
+          <div className="text-center py-8 sm:py-12">
+            <p className="text-sm sm:text-base md:text-lg text-gray-400">No cars found in this category</p>
           </div>
         )}
+      </div>
       </div>
 
       <Footer />

@@ -9,6 +9,7 @@ import carRoutes from './routes/carRoutes.js';
 import modificationRoutes from './routes/modificationRoutes.js';
 import recommendationRoutes from './routes/recommendationRoutes.js';
 import configuratorRoutes from './routes/configuratorRoutes.js';
+import serviceRoutes from './routes/serviceRoutes.js';
 
 dotenv.config();
 
@@ -21,6 +22,7 @@ app.use(
   cors({
     origin: [
       'http://localhost:5173',
+      'http://localhost:5175',
       'http://localhost:3000',
       process.env.FRONTEND_URL || 'https://topspeed-frontend.vercel.app',
     ],
@@ -38,6 +40,7 @@ app.use('/api/cars', carRoutes);
 app.use('/api/modifications', modificationRoutes);
 app.use('/api/recommendations', recommendationRoutes);
 app.use('/api/configurator', configuratorRoutes);
+app.use('/api/service', serviceRoutes);
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'Backend is running' });

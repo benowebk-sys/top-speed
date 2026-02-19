@@ -1,13 +1,22 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-import { Menu, X, LogOut, Settings } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { LogOut, Settings, Lock } from 'lucide-react';
 
-export const Navigation = () => {
+export const Navigation = ({ onSettingsClick }) => {
   const { user, logout } = useAuth();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Hide navigation links on public auth pages
+  const isPublicPage = ['/login', '/signup', '/verify-otp'].includes(location.pathname);
+
+  // Check if user is admin
+  const ADMIN_EMAIL = 'belalmohamedyousry@gmail.com';
+  const isAdmin =
+    user &&
+    (user.role === 'admin' ||
+      (user.email && user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()));
 
   const handleLogout = () => {
     logout();
@@ -15,87 +24,78 @@ export const Navigation = () => {
   };
 
   return (
-    <nav className="bg-black border-b border-gray-800 sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 flex justify-between items-center h-16">
-        <Link to="/" className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-sm">TS</span>
-          </div>
-          <span className="text-white font-bold text-xl hidden sm:inline">TOP SPEED</span>
+    <nav className="bg-gradient-to-r from-black via-gray-950 to-black border-b border-gray-800 sticky top-0 z-50 shadow-lg">
+      <div className="max-w-7xl mx-auto px-4 flex justify-between items-center h-20">
+        <Link to={user ? "/home" : "/"} className="flex items-center gap-2 hover:opacity-80 transition duration-300 group active:scale-95">
+          <img 
+            src="/images/logo.jpg" 
+            alt="TOP SPEED Logo" 
+            className="h-16 object-contain group-active:shadow-lg group-active:shadow-red-600/50 transition duration-150" 
+          />
         </Link>
 
-        <div className="hidden md:flex items-center gap-8">
-          <Link to="/cars" className="text-gray-300 hover:text-white transition">
-            Cars
-          </Link>
-          <Link to="/recommendations" className="text-gray-300 hover:text-white transition">
-            Recommendations
-          </Link>
-          <Link to="/configurator" className="text-gray-300 hover:text-white transition">
-            Configurator
-          </Link>
-          {user?.role === 'admin' && (
-            <Link to="/admin" className="text-gray-300 hover:text-white transition flex items-center gap-2">
-              <Settings size={18} />
-              Admin
-            </Link>
-          )}
-        </div>
-
-        <div className="flex items-center gap-4">
-          {user ? (
-            <div className="flex items-center gap-4">
-              <span className="text-gray-300 text-sm">{user.email}</span>
-              <button
-                onClick={handleLogout}
-                className="text-gray-300 hover:text-white transition flex items-center gap-2"
-              >
-                <LogOut size={18} />
-              </button>
-            </div>
-          ) : (
-            <Link
-              to="/login"
-              className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition"
+        {!isPublicPage && (
+          <div className="hidden md:flex items-center gap-8">
+            <Link 
+              to="/cars" 
+              className="text-gray-300 hover:text-white font-medium transition duration-300 relative group"
             >
-              Admin
-            </Link>
-          )}
-
-          <button
-            className="md:hidden text-gray-300"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
-        </div>
-      </div>
-
-      {isMenuOpen && (
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
-          className="md:hidden bg-gray-900 border-t border-gray-800"
-        >
-          <div className="flex flex-col gap-4 p-4">
-            <Link to="/cars" className="text-gray-300 hover:text-white transition">
               Cars
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-red-600 to-red-500 group-hover:w-full transition-all duration-300"></span>
             </Link>
-            <Link to="/recommendations" className="text-gray-300 hover:text-white transition">
-              Recommendations
+            <Link 
+              to="/service-maintenance" 
+              className="text-gray-300 hover:text-white font-medium transition duration-300 relative group"
+            >
+              Service
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-red-600 to-red-500 group-hover:w-full transition-all duration-300"></span>
             </Link>
-            <Link to="/configurator" className="text-gray-300 hover:text-white transition">
-              Configurator
+            <Link 
+              to="/cars-editing" 
+              className="text-gray-300 hover:text-white font-medium transition duration-300 relative group"
+            >
+              Modifications
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-red-600 to-red-500 group-hover:w-full transition-all duration-300"></span>
             </Link>
-            {user?.role === 'admin' && (
-              <Link to="/admin" className="text-gray-300 hover:text-white transition">
-                Admin
+            {isAdmin && (
+              <Link 
+                to="/admin" 
+                className="text-yellow-300 hover:text-yellow-400 font-medium transition duration-300 relative group flex items-center gap-1"
+              >
+                <Lock size={16} />
+                Dashboard
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-yellow-600 to-yellow-500 group-hover:w-full transition-all duration-300"></span>
               </Link>
             )}
           </div>
-        </motion.div>
-      )}
+        )}
+
+        <div className="flex items-center gap-6">
+          {user ? (
+            <div className="flex items-center gap-5">
+              <div className="px-4 py-1.5 rounded-lg border border-gray-700 hover:border-red-600 transition duration-300 group cursor-default">
+                <span className="text-base font-semibold text-white group-hover:text-red-400 transition duration-300">
+                  {user.name}
+                </span>
+              </div>
+              <button
+                onClick={onSettingsClick}
+                className="text-gray-400 hover:text-white p-2.5 rounded-lg border border-transparent hover:border-gray-700 transition duration-300 flex items-center justify-center hover:bg-gray-900/50"
+                title="Settings"
+              >
+                <Settings size={20} />
+              </button>
+              <button
+                onClick={handleLogout}
+                className="text-gray-400 hover:text-white p-2.5 rounded-lg border border-transparent hover:border-gray-700 transition duration-300 flex items-center justify-center hover:bg-gray-900/50"
+                title="Logout"
+              >
+                <LogOut size={20} />
+              </button>
+            </div>
+          ) : null}
+        </div>
+      </div>
     </nav>
   );
 };

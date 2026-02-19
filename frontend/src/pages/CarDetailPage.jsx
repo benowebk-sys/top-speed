@@ -16,6 +16,12 @@ export const CarDetailPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const formatPrice = (price) => {
+    return new Intl.NumberFormat('en-US', {
+      minimumFractionDigits: 0,
+    }).format(price);
+  };
+
   // بيانات افتراضية
   const DEFAULT_CARS = [
     {
@@ -35,7 +41,7 @@ export const CarDetailPage = () => {
       topSpeed: 250,
       drivetrain: 'AWD',
       category: 'Sedan',
-      price: 80000,
+      price: 3500000,
       imageUrl: '/images/cars/bmw-m440i.jpg',
       description: 'Latest generation M440i with advanced tech',
     },
@@ -56,7 +62,7 @@ export const CarDetailPage = () => {
       topSpeed: 280,
       drivetrain: 'AWD',
       category: 'Sedan',
-      price: 85000,
+      price: 3800000,
       imageUrl: '/images/cars/mercedes-c43.jpg',
       description: 'New generation AMG C43 with hybrid power',
     },
@@ -77,7 +83,7 @@ export const CarDetailPage = () => {
       topSpeed: 305,
       drivetrain: 'AWD',
       category: 'Sedan',
-      price: 125000,
+      price: 5500000,
       imageUrl: '/images/cars/audi-rs7.jpg',
       description: 'Latest RS7 Avant with enhanced power output',
     },
@@ -98,7 +104,7 @@ export const CarDetailPage = () => {
       topSpeed: 330,
       drivetrain: 'AWD',
       category: 'Sports',
-      price: 210000,
+      price: 9500000,
       imageUrl: '/images/cars/porsche-911-turbo.jpg',
       description: '2024 911 Turbo S with next-gen tech',
     },
@@ -119,7 +125,7 @@ export const CarDetailPage = () => {
       topSpeed: 350,
       drivetrain: 'AWD',
       category: 'Sports',
-      price: 550000,
+      price: 25000000,
       imageUrl: '/images/cars/lamborghini-revuelto.jpg',
       description: 'Lamborghini flagship hybrid supercar',
     },
@@ -140,7 +146,7 @@ export const CarDetailPage = () => {
       topSpeed: 320,
       drivetrain: 'RWD',
       category: 'Sports',
-      price: 450000,
+      price: 20000000,
       imageUrl: '/images/cars/ferrari-812.jpg',
       description: 'Ferrari 812 Superfast with V12 power',
     },
@@ -161,7 +167,7 @@ export const CarDetailPage = () => {
       topSpeed: 330,
       drivetrain: 'AWD',
       category: 'Sedan',
-      price: 115000,
+      price: 5000000,
       imageUrl: '/images/cars/tesla-model-s-2024.jpg',
       description: 'Refreshed Model S Plaid with improved performance',
     },
@@ -182,7 +188,7 @@ export const CarDetailPage = () => {
       topSpeed: 330,
       drivetrain: 'RWD',
       category: 'Sports',
-      price: 350000,
+      price: 16000000,
       imageUrl: '/images/cars/mclaren-artura.jpg',
       description: 'McLaren hybrid supercar with groundbreaking tech',
     },
@@ -203,7 +209,7 @@ export const CarDetailPage = () => {
       topSpeed: 335,
       drivetrain: 'AWD',
       category: 'Coupe',
-      price: 280000,
+      price: 13000000,
       imageUrl: '/images/cars/bentley-speed.jpg',
       description: 'Latest Bentley Continental Speed with ultimate luxury',
     },
@@ -224,7 +230,7 @@ export const CarDetailPage = () => {
       topSpeed: 500,
       drivetrain: 'AWD',
       category: 'Sports',
-      price: 5000000,
+      price: 150000000,
       imageUrl: '/images/cars/bugatti-bolide.jpg',
       description: 'Bugatti Bolide - fastest hypercar ever created',
     },
@@ -245,7 +251,7 @@ export const CarDetailPage = () => {
       topSpeed: 250,
       drivetrain: 'AWD',
       category: 'Sedan',
-      price: 320000,
+      price: 15000000,
       imageUrl: '/images/cars/rolls-royce-ghost-bb.jpg',
       description: 'Rolls-Royce Ghost Black Badge with exclusive styling',
     },
@@ -266,7 +272,7 @@ export const CarDetailPage = () => {
       topSpeed: 305,
       drivetrain: 'RWD',
       category: 'Sports',
-      price: 105000,
+      price: 4500000,
       imageUrl: '/images/cars/jaguar-f-type-2025.jpg',
       description: 'New generation Jaguar F-Type with modern design',
     },
@@ -287,7 +293,7 @@ export const CarDetailPage = () => {
       topSpeed: 300,
       drivetrain: 'AWD',
       category: 'Coupe',
-      price: 95000,
+      price: 4200000,
       imageUrl: '/images/cars/dodge-charger-daytona.jpg',
       description: 'New Dodge Charger Daytona EV muscle car',
     },
@@ -308,7 +314,7 @@ export const CarDetailPage = () => {
       topSpeed: 330,
       drivetrain: 'AWD',
       category: 'Sports',
-      price: 120000,
+      price: 5500000,
       imageUrl: '/images/cars/corvette-e-ray.jpg',
       description: 'Chevrolet Corvette E-Ray hybrid supercar',
     },
@@ -351,9 +357,9 @@ export const CarDetailPage = () => {
     return (
       <PageTransition>
         <Navigation />
-        <div className="text-center py-24">
-          <div className="w-12 h-12 border-4 border-gray-700 border-t-red-600 rounded-full animate-spin mx-auto"></div>
-          <p className="text-gray-400 mt-4">Loading car details...</p>
+        <div className="text-center py-12 sm:py-16 md:py-24">
+          <div className="w-10 sm:w-12 h-10 sm:h-12 border-4 border-gray-700 border-t-red-600 rounded-full animate-spin mx-auto"></div>
+          <p className="text-xs sm:text-sm md:text-base text-gray-400 mt-3 sm:mt-4">Loading car details...</p>
         </div>
         <Footer />
       </PageTransition>
@@ -364,11 +370,11 @@ export const CarDetailPage = () => {
     return (
       <PageTransition>
         <Navigation />
-        <div className="text-center py-24">
-          <p className="text-red-600 font-semibold text-lg">{error || 'Car not found'}</p>
+        <div className="text-center py-12 sm:py-16 md:py-24">
+          <p className="text-sm sm:text-base md:text-lg text-red-600 font-semibold">{error || 'Car not found'}</p>
           <button
             onClick={() => navigate('/cars')}
-            className="mt-6 px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold transition"
+            className="mt-4 sm:mt-6 px-3 sm:px-6 py-1.5 sm:py-2 bg-red-600 hover:bg-red-700 text-white text-xs sm:text-sm md:text-base rounded-lg font-semibold transition"
           >
             Back to Cars
           </button>
@@ -380,124 +386,150 @@ export const CarDetailPage = () => {
 
   return (
     <PageTransition>
-      <Navigation />
+      <div>
       
-      <div className="max-w-7xl mx-auto px-4 py-12">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-6 sm:py-12">
         {/* زر العودة */}
         <motion.button
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           onClick={() => navigate('/cars')}
-          className="flex items-center gap-2 text-red-600 hover:text-red-500 mb-8 font-semibold transition"
+          className="flex items-center gap-2 text-xs sm:text-sm md:text-base text-red-600 hover:text-red-500 mb-4 sm:mb-6 md:mb-8 font-semibold transition"
         >
-          <ArrowLeft className="w-5 h-5" />
+          <ArrowLeft className="w-4 sm:w-5 h-4 sm:h-5" />
           Back to Cars
         </motion.button>
 
-        <div className="grid md:grid-cols-2 gap-12">
+      <div className="flex justify-center">
+        <div className="max-w-2xl w-full flex flex-col items-center">
           {/* الصورة */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="aspect-square bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl overflow-hidden"
+            className="max-w-xs md:max-w-sm h-48 sm:h-56 md:h-64 lg:h-80 bg-gradient-to-br from-gray-900 to-black rounded-xl overflow-hidden flex items-center justify-center mb-4 sm:mb-6 md:mb-8 w-full"
           >
             {car.imageUrl ? (
               <img
                 src={car.imageUrl}
                 alt={`${car.brand} ${car.model}`}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain"
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center">
-                <Wrench className="w-24 h-24 text-gray-600" />
+              <div className="flex items-center justify-center">
+                <Wrench className="w-16 sm:w-20 md:w-24 h-16 sm:h-20 md:h-24 text-gray-600" />
               </div>
             )}
           </motion.div>
 
           {/* التفاصيل */}
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="w-full"
           >
             {/* الرأس */}
-            <div className="mb-8">
-              <h1 className="text-5xl font-bold text-white mb-2">
+            <div className="mb-4 sm:mb-6 md:mb-8">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-1 sm:mb-2">
                 {car.brand} {car.model}
               </h1>
-              <p className="text-2xl text-red-600 font-semibold mb-4">
-                ${car.price?.toLocaleString() || 'N/A'}
+              <p className="text-lg sm:text-2xl text-red-600 font-semibold mb-2 sm:mb-4">
+                {formatPrice(car.price) || 'N/A'}
               </p>
-              <p className="text-gray-300 text-lg mb-4">{car.description}</p>
-              <div className="flex gap-4">
-                <span className="px-4 py-2 bg-red-600 text-white rounded-lg font-semibold">
+              <p className="text-xs sm:text-sm md:text-base text-gray-300 mb-3 sm:mb-4">{car.description}</p>
+              <div className="flex gap-2 sm:gap-4">
+                <span className="px-2 sm:px-4 py-1 sm:py-2 bg-red-600 text-white text-xs sm:text-sm md:text-base rounded-lg font-semibold">
                   {car.year}
                 </span>
-                <span className="px-4 py-2 bg-gray-800 text-gray-300 rounded-lg font-semibold">
+                <span className="px-2 sm:px-4 py-1 sm:py-2 bg-gray-800 text-gray-300 text-xs sm:text-sm md:text-base rounded-lg font-semibold">
                   {car.category}
                 </span>
               </div>
             </div>
 
             {/* مواصفات الأداء */}
-            <div className="grid grid-cols-2 gap-4 mb-8">
-              <div className="bg-gray-900 rounded-lg p-4 border border-gray-800">
-                <Zap className="w-5 h-5 text-red-600 mb-2" />
-                <p className="text-gray-400 text-sm">Horsepower</p>
-                <p className="text-white text-2xl font-bold">{car.horsepower} HP</p>
+            <div className="grid grid-cols-2 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6 md:mb-8">
+              <div className="bg-gray-900 rounded-lg p-2 sm:p-3 md:p-4 border border-gray-800">
+                <Zap className="w-4 sm:w-5 h-4 sm:h-5 text-red-600 mb-1" />
+                <p className="text-xs text-gray-400">Horsepower</p>
+                <p className="text-base sm:text-xl md:text-2xl text-white font-bold">{car.horsepower} HP</p>
               </div>
-              <div className="bg-gray-900 rounded-lg p-4 border border-gray-800">
-                <Droplets className="w-5 h-5 text-blue-600 mb-2" />
-                <p className="text-gray-400 text-sm">Torque</p>
-                <p className="text-white text-2xl font-bold">{car.torque} Nm</p>
+              <div className="bg-gray-900 rounded-lg p-2 sm:p-3 md:p-4 border border-gray-800">
+                <Droplets className="w-4 sm:w-5 h-4 sm:h-5 text-blue-600 mb-1" />
+                <p className="text-xs text-gray-400">Torque</p>
+                <p className="text-base sm:text-xl md:text-2xl text-white font-bold">{car.torque} Nm</p>
               </div>
-              <div className="bg-gray-900 rounded-lg p-4 border border-gray-800">
-                <Gauge className="w-5 h-5 text-orange-600 mb-2" />
-                <p className="text-gray-400 text-sm">0-100 km/h</p>
-                <p className="text-white text-2xl font-bold">{typeof car.acceleration === 'number' ? car.acceleration.toFixed(1) : (parseFloat(car.acceleration) || 0).toFixed(1)}s</p>
+              <div className="bg-gray-900 rounded-lg p-2 sm:p-3 md:p-4 border border-gray-800">
+                <Gauge className="w-4 sm:w-5 h-4 sm:h-5 text-orange-600 mb-1" />
+                <p className="text-xs text-gray-400">0-100 km/h</p>
+                <p className="text-base sm:text-xl md:text-2xl text-white font-bold">{typeof car.acceleration === 'number' ? car.acceleration.toFixed(1) : (parseFloat(car.acceleration) || 0).toFixed(1)}s</p>
               </div>
-              <div className="bg-gray-900 rounded-lg p-4 border border-gray-800">
-                <Fuel className="w-5 h-5 text-green-600 mb-2" />
-                <p className="text-gray-400 text-sm">Top Speed</p>
-                <p className="text-white text-2xl font-bold">{car.topSpeed} km/h</p>
+              <div className="bg-gray-900 rounded-lg p-2 sm:p-3 md:p-4 border border-gray-800">
+                <Fuel className="w-4 sm:w-5 h-4 sm:h-5 text-green-600 mb-1" />
+                <p className="text-xs text-gray-400">Top Speed</p>
+                <p className="text-base sm:text-xl md:text-2xl text-white font-bold">{car.topSpeed} km/h</p>
               </div>
             </div>
 
             {/* تفاصيل المحرك */}
-            <div className="bg-gray-900 rounded-lg p-6 border border-gray-800 mb-8">
-              <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-                <Wrench className="w-5 h-5 text-red-600" />
+            <div className="bg-gray-900 rounded-lg p-3 sm:p-4 md:p-6 border border-gray-800 mb-4 sm:mb-6 md:mb-8">
+              <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-3 sm:mb-4 flex items-center gap-2">
+                <Wrench className="w-4 sm:w-5 h-4 sm:h-5 text-red-600" />
                 Engine Details
               </h3>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-2 sm:gap-3 md:gap-4">
                 <div>
-                  <p className="text-gray-400 text-sm">Engine Type</p>
-                  <p className="text-white font-semibold">{car.engine.type}</p>
+                  <p className="text-xs text-gray-400">Engine Type</p>
+                  <p className="text-xs sm:text-sm text-white font-semibold">{car.engine.type}</p>
                 </div>
                 <div>
-                  <p className="text-gray-400 text-sm">Cylinders</p>
-                  <p className="text-white font-semibold">{car.engine.cylinders} Cyl</p>
+                  <p className="text-xs text-gray-400">Cylinders</p>
+                  <p className="text-xs sm:text-sm text-white font-semibold">{car.engine.cylinders} Cyl</p>
                 </div>
                 <div>
-                  <p className="text-gray-400 text-sm">Displacement</p>
-                  <p className="text-white font-semibold">{car.engine.displacement} cc</p>
+                  <p className="text-xs text-gray-400">Displacement</p>
+                  <p className="text-xs sm:text-sm text-white font-semibold">{car.engine.displacement} cc</p>
                 </div>
                 <div>
-                  <p className="text-gray-400 text-sm">Fuel Type</p>
-                  <p className="text-white font-semibold">{car.fuelType}</p>
+                  <p className="text-xs text-gray-400">Fuel Type</p>
+                  <p className="text-xs sm:text-sm text-white font-semibold">{car.fuelType}</p>
                 </div>
                 <div>
-                  <p className="text-gray-400 text-sm">Drivetrain</p>
-                  <p className="text-white font-semibold">{car.drivetrain}</p>
+                  <p className="text-xs text-gray-400">Drivetrain</p>
+                  <p className="text-xs sm:text-sm text-white font-semibold">{car.drivetrain}</p>
                 </div>
               </div>
             </div>
 
-            {/* زر التخصيص */}
-            <button className="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-lg font-semibold transition text-lg">
-              Customize This Car
-            </button>
+            {/* أزرار */}
+            <div className="grid grid-cols-1 gap-2 sm:gap-3 md:gap-4">
+              <button 
+                onClick={() => {
+                  const params = new URLSearchParams({
+                    brand: car.brand,
+                    model: car.model,
+                    year: car.year,
+                    price: car.price,
+                    horsepower: car.horsepower,
+                    torque: car.torque,
+                    topSpeed: car.topSpeed,
+                    acceleration: car.acceleration,
+                    fuelType: car.fuelType,
+                    engineType: car.engine.type,
+                    cylinders: car.engine.cylinders,
+                    drivetrain: car.drivetrain,
+                    imageUrl: car.imageUrl,
+                  });
+                  navigate(`/purchase?${params.toString()}`);
+                }}
+                className="bg-green-600 hover:bg-green-700 text-white py-2 sm:py-3 text-xs sm:text-base md:text-lg rounded-lg font-semibold transition"
+              >
+                Buy Now
+              </button>
+            </div>
           </motion.div>
         </div>
+      </div>
+      </div>
       </div>
 
       <Footer />

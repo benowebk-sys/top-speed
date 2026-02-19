@@ -4,7 +4,6 @@ import { useAuth } from '../hooks/useAuth';
 import { carService, modificationService } from '../services/api';
 import { AnimatedCard, PageTransition } from '../components/Animations';
 import { Header, Footer } from '../components/Layout';
-import { Navigation } from '../components/Navigation';
 import { Plus, Edit, Trash2, Upload, Eye, EyeOff } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -96,20 +95,20 @@ export const AdminPage = () => {
 
   return (
     <PageTransition>
-      <Navigation />
+      <div>
       <Header title="Admin Dashboard" subtitle="Manage your automotive platform" />
 
-      <div className="max-w-7xl mx-auto px-4 py-12">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-6 sm:py-12">
         {loading ? (
-          <div className="text-center">
-            <div className="w-12 h-12 border-4 border-gray-700 border-t-red-600 rounded-full animate-spin mx-auto"></div>
+          <div className="text-center py-8 sm:py-12">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 border-4 border-gray-700 border-t-red-600 rounded-full animate-spin mx-auto"></div>
           </div>
         ) : (
           <>
-            <div className="flex gap-4 mb-8 border-b border-gray-800">
+            <div className="flex gap-2 sm:gap-4 mb-6 sm:mb-8 border-b border-gray-800">
               <button
                 onClick={() => setActiveTab('cars')}
-                className={`px-4 py-3 font-semibold border-b-2 transition ${
+                className={`px-2 sm:px-4 py-1 sm:py-3 text-xs sm:text-sm md:text-base font-semibold border-b-2 transition ${
                   activeTab === 'cars'
                     ? 'border-red-600 text-white'
                     : 'border-transparent text-gray-400 hover:text-white'
@@ -119,7 +118,7 @@ export const AdminPage = () => {
               </button>
               <button
                 onClick={() => setActiveTab('modifications')}
-                className={`px-4 py-3 font-semibold border-b-2 transition ${
+                className={`px-2 sm:px-4 py-1 sm:py-3 text-xs sm:text-sm md:text-base font-semibold border-b-2 transition ${
                   activeTab === 'modifications'
                     ? 'border-red-600 text-white'
                     : 'border-transparent text-gray-400 hover:text-white'
@@ -133,9 +132,9 @@ export const AdminPage = () => {
               <div>
                 <button
                   onClick={() => setShowAddCarForm(!showAddCarForm)}
-                  className="mb-8 px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold flex items-center gap-2 transition"
+                  className="mb-4 sm:mb-8 px-3 sm:px-6 py-1.5 sm:py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold flex items-center gap-2 transition text-xs sm:text-sm md:text-base"
                 >
-                  <Plus size={20} />
+                  <Plus size={16} />
                   Add New Car
                 </button>
 
@@ -290,43 +289,43 @@ export const AdminPage = () => {
                     <AnimatedCard key={car._id}>
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
-                          <h3 className="text-lg font-bold text-white">
-                            {car.brand} {car.model}
-                          </h3>
-                          <p className="text-gray-400 text-sm mb-3">
-                            {car.year} | {car.horsepower} HP | {car.topSpeed} km/h
-                          </p>
+                                  <h3 className="text-sm sm:text-lg font-bold text-white">
+                                    {car.brand} {car.model}
+                                  </h3>
+                                  <p className="text-gray-400 text-xs sm:text-sm mb-2">
+                                    {car.year} | {car.horsepower} HP | {car.topSpeed} km/h
+                                  </p>
                           <div className="flex gap-2">
-                            {car.isVisible ? (
-                              <span className="px-3 py-1 bg-green-900/30 border border-green-600 text-green-400 text-xs rounded-full flex items-center gap-1">
-                                <Eye size={14} />
-                                Visible
-                              </span>
-                            ) : (
-                              <span className="px-3 py-1 bg-gray-800 border border-gray-700 text-gray-400 text-xs rounded-full flex items-center gap-1">
-                                <EyeOff size={14} />
-                                Hidden
-                              </span>
-                            )}
+                                    {car.isVisible ? (
+                                      <span className="px-2 py-0.5 sm:px-3 sm:py-1 bg-green-900/30 border border-green-600 text-green-400 text-xs rounded-full flex items-center gap-1">
+                                        <Eye size={14} />
+                                        Visible
+                                      </span>
+                                    ) : (
+                                      <span className="px-2 py-0.5 sm:px-3 sm:py-1 bg-gray-800 border border-gray-700 text-gray-400 text-xs rounded-full flex items-center gap-1">
+                                        <EyeOff size={14} />
+                                        Hidden
+                                      </span>
+                                    )}
                           </div>
                         </div>
-                        <div className="flex gap-2">
-                          <button
-                            onClick={() => handleToggleVisibility(car._id, car.isVisible)}
-                            className="p-2 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-lg transition"
-                          >
-                            {car.isVisible ? <EyeOff size={18} /> : <Eye size={18} />}
-                          </button>
-                          <button className="p-2 bg-blue-900/30 hover:bg-blue-800/50 text-blue-400 rounded-lg transition">
-                            <Edit size={18} />
-                          </button>
-                          <button
-                            onClick={() => handleDeleteCar(car._id)}
-                            className="p-2 bg-red-900/30 hover:bg-red-800/50 text-red-400 rounded-lg transition"
-                          >
-                            <Trash2 size={18} />
-                          </button>
-                        </div>
+                                <div className="flex gap-2">
+                                  <button
+                                    onClick={() => handleToggleVisibility(car._id, car.isVisible)}
+                                    className="p-2 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-lg transition text-xs sm:text-sm"
+                                  >
+                                    {car.isVisible ? <EyeOff size={16} /> : <Eye size={16} />}
+                                  </button>
+                                  <button className="p-2 bg-blue-900/30 hover:bg-blue-800/50 text-blue-400 rounded-lg transition text-xs sm:text-sm">
+                                    <Edit size={16} />
+                                  </button>
+                                  <button
+                                    onClick={() => handleDeleteCar(car._id)}
+                                    className="p-2 bg-red-900/30 hover:bg-red-800/50 text-red-400 rounded-lg transition text-xs sm:text-sm"
+                                  >
+                                    <Trash2 size={16} />
+                                  </button>
+                                </div>
                       </div>
                     </AnimatedCard>
                   ))}
@@ -374,6 +373,7 @@ export const AdminPage = () => {
             )}
           </>
         )}
+      </div>
       </div>
 
       <Footer />

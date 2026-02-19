@@ -18,7 +18,11 @@ export const authMiddleware = (req, res, next) => {
 
 export const adminMiddleware = (req, res, next) => {
   authMiddleware(req, res, () => {
-    if (req.user.role !== 'admin') {
+    const ADMIN_EMAIL = 'belalmohamedyousry@gmail.com';
+    const isAdminByRole = req.user.role === 'admin';
+    const isAdminByEmail = req.user.email && req.user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase();
+
+    if (!isAdminByRole && !isAdminByEmail) {
       return res.status(403).json({ error: 'Admin access required' });
     }
     next();

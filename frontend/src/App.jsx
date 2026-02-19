@@ -1,27 +1,49 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { HomePage } from './pages/HomePage';
 import { CarsPage } from './pages/CarsPage';
 import { CarDetailPage } from './pages/CarDetailPage';
-import { RecommendationsPage } from './pages/RecommendationsPage';
-import { ConfiguratorPage } from './pages/ConfiguratorPage';
+import { PurchasePage } from './pages/PurchasePage';
+import { CarsEditingPage } from './pages/CarsEditingPage';
+import { ServiceMaintenancePage } from './pages/ServiceMaintenancePage';
 import { LoginPage } from './pages/LoginPage';
-import { AdminPage } from './pages/AdminPage';
+import { SignUpPage } from './pages/SignUpPage';
+import { OTPVerificationPage } from './pages/OTPVerificationPage';
+import { AdminDashboard } from './pages/AdminDashboard';
+import { ProtectedRoute } from './components/ProtectedRoute';
+import { Navigation } from './components/Navigation';
+import { SettingsPanel } from './components/SettingsPanel';
 import './styles/globals.css';
 
 function App() {
+  const [isSettingsPanelOpen, setIsSettingsPanelOpen] = useState(false);
+
   return (
     <Router>
       <AuthProvider>
+        <Navigation onSettingsClick={() => setIsSettingsPanelOpen(true)} />
+        <SettingsPanel 
+          isOpen={isSettingsPanelOpen} 
+          onClose={() => setIsSettingsPanelOpen(false)} 
+        />
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/cars" element={<CarsPage />} />
-          <Route path="/car-detail" element={<CarDetailPage />} />
-          <Route path="/recommendations" element={<RecommendationsPage />} />
-          <Route path="/configurator" element={<ConfiguratorPage />} />
+          {/* Public Auth Routes */}
+          <Route path="/" element={<SignUpPage />} />
+          <Route path="/signup" element={<SignUpPage />} />
+          <Route path="/verify-otp" element={<OTPVerificationPage />} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/admin" element={<AdminPage />} />
+
+          {/* Protected Main Routes */}
+          <Route path="/home" element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
+          <Route path="/cars" element={<ProtectedRoute><CarsPage /></ProtectedRoute>} />
+          <Route path="/car-detail" element={<ProtectedRoute><CarDetailPage /></ProtectedRoute>} />
+          <Route path="/purchase" element={<ProtectedRoute><PurchasePage /></ProtectedRoute>} />
+          <Route path="/cars-editing" element={<ProtectedRoute><CarsEditingPage /></ProtectedRoute>} />
+          <Route path="/service-maintenance" element={<ProtectedRoute><ServiceMaintenancePage /></ProtectedRoute>} />
+          <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+
+          {/* Fallback Route */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </AuthProvider>
